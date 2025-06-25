@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quiz Colloquio Java - 30 Domande</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background: #f4f4f4;
+	margin: 0;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.container {
+	background: white;
+	padding: 20px;
+	border-radius: 10px;
+	width: 90%;
+	max-width: 800px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.question {
+	font-weight: bold;
+	margin-bottom: 10px;
+	white-space: pre-wrap;
+}
+
+.options label {
+	display: block;
+	margin: 8px 0;
+}
+
+.correct {
+	color: green;
+	font-weight: bold;
+	font-size: 0.9em;
+	margin-bottom: 4px;
+}
+
+.wrong {
+	color: darkred;
+	font-weight: bold;
+	font-size: 0.9em;
+	margin-bottom: 4px;
+}
+
+.timer {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	background: #222;
+	color: white;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.error {
+	color: red;
+	display: none;
+	margin-top: 10px;
+}
+</style>
+</head>
+<body>
+	<div class="timer" id="timer">Tempo: 30:00</div>
+	<div class="container">
+		<h1>Quiz Java - Domande da Colloquio</h1>
+		<div class="question" id="question"></div>
+		<div class="options" id="options"></div>
+		<button id="nextBtn">Avanti</button>
+		<div class="error" id="error">⚠️ Seleziona una risposta prima di
+			proseguire.</div>
+	</div>
+
+	<script>
+	const questions = [
+		
+			{
+				q: "1. Quale tra questi NON è un tipo di dato primitivo in Java?",
+				options: ["int", "String", "boolean", "double"],
+				correct: 1
+			},
+			{
+				q: "2. Qual è la differenza principale tra una classe e un oggetto in Java?",
+				options: ["Non c'è differenza", "La classe è il modello, l'oggetto è l'istanza della classe", "L'oggetto è il modello, la classe è l'istanza", "Sono sinonimi"],
+		    	correct: 1
+			},
+			{
+				q: "3. Quale parola chiave viene utilizzata per gestire le eccezioni in Java?",
+				options: ["catch", "exception", "error", "handle"],
+				correct: 0
+			},
+			{
+				q: "4. Nel contesto di Java, quale delle seguenti affermazioni descrive correttamente la classe java.lang.Object?",
+				options: [
+				"È un tipo di dato primitivo, analogo a int o boolean, utilizzato per contenere qualsiasi valore.",
+				"È una parola chiave (keyword) utilizzata per dichiarare una variabile senza specificarne il tipo, simile a var.",
+				"È un'interfaccia che deve essere implementata da ogni classe per garantire la compatibilità con la JVM.",
+				"È la superclasse radice da cui, direttamente o indirettamente, ereditano tutte le altre classi in Java."],
+				correct: 3
+			},
+			{
+				q: "5. Quale modificatore di visibilità rende un attributo accessibile solo all'interno della stessa classe?",
+				options: ["public", "protected", "private", "default"],
+				correct: 2
+			},
+			{
+				q: "6. In Java, se una classe non sovrascrive (override) il metodo toString(), quale sarà il formato esatto della stringa restituita dalla sua implementazione di default (quella ereditata da java.lang.Object)?",
+				options:
+					["Una stringa JSON contenente i nomi e i valori di tutti gli attributi dell'oggetto.",
+					"L'indirizzo di memoria fisico dove l'oggetto è allocato nella Heap.",
+					"Semplicemente il nome qualificato della classe (es. com.example.MioOggetto).",
+					"Il nome della classe, seguito dal simbolo '@' e dal valore dell'hash code dell'oggetto in formato esadecimale."],
+				correct: 3
+			},
+			{
+				q: "7. Quale parola chiave definisce un metodo statico?",
+				options: ["final", "static", "const", "fixed"],
+				correct: 1
+			},
+			{
+				q: "8. Qual è la differenza fondamentale tra un costruttore e un metodo set in Java?",
+				options: [
+					"un metodo set è obbligatorio per creare un oggetto, mentre il costruttore è un metodo opzionale usato per cambiare i valori degli attributi dopo la creazione.",
+					"la differenza principale è che un metodo set deve obbligatoriamente restituire un valore (return), mentre un costruttore ha sempre un tipo di ritorno void.",
+					"il costruttore può inizializzare solo gli attributi public, mentre i metodi set sono gli unici che possono modificare gli attributi private.",
+					"Il costruttore viene chiamato una sola volta, al momento della creazione (new), per inizializzare lo stato di un oggetto e garantirne la validità iniziale. Un metodo set, invece, serve a modificare lo stato di un oggetto già esistente e può essere invocato più volte durante il suo ciclo di vita."],
+				correct: 3
+			},
+			{
+				q: "9. Quale di queste NON è una caratteristica dell'ereditarietà in Java?",
+				options: ["Riutilizzo del codice", "Relazione \"is-a\"", "Ereditarietà multipla da classi", "Override dei metodi"],
+				correct: 2
+			},
+			{
+				q: "10. Quale Collection è più appropriata quando NON si vogliono elementi duplicati?",
+				options: ["List", "Set", "Map", "Queue"],
+				correct: 1
+			},
+			{
+				q: "11. Cosa significa RDBMS?",
+				options: [
+					"Relational Database Management System",
+					"Remote Database Management System",
+					"Redundant Database Management System",
+					"Recursive Database Management System"],
+				correct: 0
+			},
+			{
+				q: "12. In una relazione 1:molti, dove si posiziona la chiave esterna?",
+				options: [
+					"Nella tabella \"uno\"",
+					"Nella tabella \"molti\"",
+					"In entrambe le tabelle",
+					"In una tabella separata"],
+				correct: 1
+			},
+			{
+				q: "13. Quale comando SQL appartiene al DDL (Data Definition Language)?",
+				options: ["SELECT", "INSERT", "CREATE", "UPDATE"],
+				correct: 2
+			},
+			{
+				q: "14. Quale tipo di JOIN restituisce tutti i record della tabella di sinistra?",
+				options: ["INNER JOIN", "RIGHT JOIN", "LEFT JOIN", "FULL JOIN"],
+				correct: 2
+			},
+			{
+				q: "15. Quale funzione di aggregazione calcola la media?",
+				options: ["SUM()", "AVG()", "COUNT()", "MAX()"],
+				correct: 1
+			},
+			{
+				q: "16. In un database relazionale, quale vincolo garantisce che una colonna (o un insieme di colonne) contenga solo valori univoci e, allo stesso tempo, non accetti valori NULL?",
+				options: ["Un vincolo UNIQUE", "Un vincolo FOREIGN KEY", "Un vincolo CHECK", "Un vincolo PRIMARY KEY"],
+				correct: 3
+			},
+			{
+				q: "17. In una query SQL, quale clausola viene utilizzata per filtrare i risultati dopo che le righe sono state raggruppate tramite GROUP BY e le funzioni di aggregazione (come COUNT() o AVG()) sono state calcolate?",
+				options: ["WHERE", "HAVING", "FILTER", "AND"],
+				correct: 1
+			},
+			{
+				q: "18. Considera la seguente tabella Ordini:\nID_Cliente | Prodotto | Importo\n101 | Libro | 20\n102 | Penna | 5\n101 | Tazza | 15\n103 | Libro | 20\n101 | Penna | 5\n\nQuale sarà il risultato della seguente query?\nSELECT ID_Cliente, SUM(Importo) AS Spesa_Totale\nFROM Ordini\nGROUP BY ID_Cliente;",
+				options: [
+					"101: 40, 102: 5, 103: 20",
+					"101: 3, 102: 1, 103: 1",
+					"101: 20, 102: 5, 101: 15, 103: 20, 101: 5",
+					"Libro: 40, Penna: 10, Tazza: 15"],
+				correct: 0
+			},
+			{
+				q: "19. Cosa rappresenta JDBC in Java?",
+				options: ["Java Database Connection", "Java Database Connectivity", "Java Data Base Control", "Java Database Component"],
+				correct: 1
+			},
+			{
+				q: "20. Quale interfaccia JDBC è preferibile per query parametrizzate?",
+				options: ["Statement", "PreparedStatement", "CallableStatement", "ResultSet"],
+				correct: 1
+			},
+			{
+				q: "21. Cosa significa DAO nel pattern DAO?",
+				options: ["Data Access Object", "Database Access Object", "Data Application Object", "Database Application Object"],
+				correct: 0
+			},
+			{
+				q: "22. HTML5 è un linguaggio:",
+				options: ["Di programmazione", "A marcatori (markup)", "Di scripting", "Compilato"],
+				correct: 1
+			},
+			{
+				q: "23. Cosa significa CSS?",
+				options: ["Computer Style Sheets", "Cascading Style Sheets", "Creative Style System", "Common Style Syntax"],
+				correct: 1
+			},
+			{
+				q: "24. Cosa rappresenta il DOM?",
+				options: ["Database Object Model", "Document Object Model", "Dynamic Object Management", "Data Object Mapping"],
+				correct: 1
+			},
+			{
+				q: "25. In HTML5, qual è il vantaggio principale dell'utilizzare tag semantici come &lt;article&gt;, &lt;section&gt; o &lt;nav&gt; al posto di un &lt;div&gt; generico?",
+				options: [
+					"Hanno stili CSS predefiniti...",
+					"Renderizzati più velocemente...",
+					"Migliorano accessibilità, SEO e leggibilità",
+					"Servono solo per interazione JS"],
+				correct: 2
+			},
+			{
+				q: "26. Cosa significa Java EE?",
+				options: ["Java Extended Edition", "Java Enterprise Edition", "Java Enhanced Edition", "Java Embedded Edition"],
+				correct: 1
+			},
+			{
+				q: "27. Apache Tomcat è:",
+				options: ["Un Servlet Container", "Un Application Server", "Un linguaggio di programmazione", "Un sistema operativo"],
+				correct: 0
+			},
+			{
+				q: "28. Nel pattern MVC, cosa rappresenta la \"V\"?",
+				options: ["Variable", "View", "Value", "Vector"],
+				correct: 1
+			},
+			{
+				q: "29. Nel contesto del pattern architetturale MVC per un'applicazione web Java, quali sono i ruoli tipici di una Servlet e di una pagina JSP?",
+				options: [
+					"JSP è Controller, Servlet è View",
+					"Servlet gestisce POST, JSP solo GET",
+					"Servlet = Controller, JSP = View",
+					"Servlet è obsoleta, logica in JSP"],
+				correct: 2
+			},
+			{
+				q: "30. Cosa significa JSP?",
+				options: ["Java Server Pages", "Java Script Pages", "Java System Pages", "Java Standard Pages"],
+				correct: 0
+			}
+			];
+    
+	let current = 0, score = 0, wrongAnswers = [], rightAnswers = [], time = 1800;
+    const timerDisplay = document.getElementById("timer");
+
+    function showQuestion() {
+      const q = questions[current];
+      document.getElementById("question").textContent = q.q;
+      document.getElementById("options").innerHTML = q.options.map((opt, i) =>
+        `<label><input type="radio" name="answer" value="${i}"> ${opt}</label>`).join('');
+      document.getElementById("error").style.display = "none";
+    }
+
+    function showResults() {
+      let html = `<h2>Hai risposto correttamente a ${score} su ${questions.length} domande!</h2>`;
+      if (rightAnswers.length > 0) {
+        html += `<div class="review"><h3>Risposte corrette:</h3><ul>`;
+        rightAnswers.forEach(item => {
+          html += `<li class="correct"><strong>${item.question}</strong><br>Risposta data: <em>${item.selected}</em></li>`;
+        });
+        html += `</ul></div>`;
+      }
+      if (wrongAnswers.length > 0) {
+        html += `<div class="review"><h3>Domande sbagliate:</h3><ul>`;
+        wrongAnswers.forEach(item => {
+          html += `<li class="wrong"><strong>${item.question}</strong><br>Risposta data: <em>${item.selected}</em><br>Risposta corretta: <em>${item.correct}</em></li>`;
+        });
+        html += `</ul></div>`;
+      }
+      html += `<button onclick="location.reload()">Ricomincia</button>`;
+      document.querySelector('.container').innerHTML = html;
+    }
+
+    document.getElementById("nextBtn").addEventListener("click", function (e) {
+      e.preventDefault();
+      const selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) {
+        document.getElementById("error").style.display = "block";
+        return;
+      }
+      const idx = parseInt(selected.value);
+      const q = questions[current];
+      if (idx === q.correct) {
+        score++;
+        rightAnswers.push({
+          question: q.q,
+          selected: q.options[idx]
+        });
+      } else {
+        wrongAnswers.push({
+          question: q.q,
+          selected: q.options[idx],
+          correct: q.options[q.correct]
+        });
+      }
+
+      current++;
+      if (current < questions.length) showQuestion();
+      else { clearInterval(timer); showResults(); }
+    });
+
+    const timer = setInterval(() => {
+      const min = Math.floor(time / 60), sec = time % 60;
+      timerDisplay.textContent = `Tempo: ${min}:${sec.toString().padStart(2, '0')}`;
+      if (--time < 0) { clearInterval(timer); showResults(); }
+    }, 1000);
+
+    showQuestion();
+  </script>
+</body>
+</html>
